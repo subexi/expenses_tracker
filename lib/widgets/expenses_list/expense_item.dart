@@ -26,12 +26,15 @@ class ExpenseItem extends StatelessWidget {
                 Text('\$${expense.amount.toStringAsFixed(2)}'),
                 // Add a Spacer widget to push the date to the right end of the Row
                 const Spacer(),
+
                 Row(
                   children: [
-                    const Icon(Icons.alarm),
+                    // Display the icon corresponding to the category of the expense
+                    Icon(categoryIcons[expense.category]),
                     const SizedBox(width: 8),
                     Text(
-                      expense.date.toString(),
+                      // Display the formatted date of the expense
+                      expense.formattedDate,
                     ),
                   ],
                 )

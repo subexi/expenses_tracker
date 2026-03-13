@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
+
+// Create a DateFormat instance to format the date of the expenses
+final formatter = DateFormat('d.M.y'); // Format: day.month.year
 
 // Create a new UUID
 const uuid = Uuid();
@@ -10,6 +15,14 @@ enum Category {
   leisure,
   work,
 }
+
+// A mapping of each category to its corresponding icon
+const categoryIcons = {
+  Category.food: Icons.lunch_dining,
+  Category.travel: Icons.flight_takeoff,
+  Category.leisure: Icons.movie,
+  Category.work: Icons.work,
+};
 
 class Expense {
   // Constructor for the Expense class
@@ -26,4 +39,8 @@ class Expense {
   final double amount;
   final DateTime date;
   final Category category;
+
+  // A getter to return the formatted date of the expense
+  String get formattedDate => formatter.format(date);
+
 }
