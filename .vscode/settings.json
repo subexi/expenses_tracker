@@ -2,7 +2,7 @@
     "editor.formatOnSave": true,
     "[dart]": {
         "editor.defaultFormatter": "Dart-Code.dart-code",
-        "editor.formatOnSave": false
+        "editor.formatOnSave": true
     },
     "editor.tokenColorCustomizations": {
         "comments": "",
