@@ -32,6 +32,17 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     // Build the main UI for the Expenses screen
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Flutter ExpenseTracker'
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const Text('The chart'),

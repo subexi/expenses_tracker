@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 // Create a DateFormat instance to format the date of the expenses
-final formatter = DateFormat('d.M.y'); // Format: day.month.year
+final formatter = DateFormat('dd.MM.y'); // Format: day.month.year
 
 // Create a new UUID
 const uuid = Uuid();
