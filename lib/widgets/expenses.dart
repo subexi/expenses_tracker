@@ -1,3 +1,4 @@
+import 'package:expense_tracker/widgets/new_expends.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/models/expense.dart';
@@ -32,7 +33,7 @@ class _ExpensesState extends State<Expenses> {
     // Open a modal bottom sheet to add a new expense
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const Text('This is a modal sheet'),
+      builder: (ctx) => const NewExpense(),
     );
   }
 
