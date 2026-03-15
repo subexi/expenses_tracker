@@ -14,6 +14,18 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    // Show a date picker dialog to select the date of the expense
+    showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+  }
+
   @override
   // Dispose of the TextEditingController when the widget is removed from the widget tree
   void dispose() {
@@ -46,6 +58,7 @@ class _NewExpenseState extends State<NewExpense> {
             children: [
               Expanded(
                 child: TextField(
+                  // Use the TextEditingController to manage the input for the amount of the expense
                   // Set the keyboard type to number for the amount input
                   controller: _amountController,
                   keyboardType: TextInputType.number,
@@ -54,16 +67,36 @@ class _NewExpenseState extends State<NewExpense> {
                     // Add a prefix text to indicate that the amount is in dollars
                     prefixText: '\$ ',
                   ),
+                ), //
+              ),
+
+              const SizedBox(width: 16),
+
+              Expanded(
+                child: Row(
+                  // Align the children of the Row to the end of the main axis
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Selected Date'),
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month),
+                    )
+                  ], // End of Row children
                 ),
               ),
-            ],
+            ], // End of Row children
           ),
 
-
+          // A Row to hold the Cancel and Save Expense buttons
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Close the modal bottom sheet when the Cancel button is pressed
+                  Navigator.pop(context);
+                },
                   child: const Text(
                     'Cancel',
                   ),
@@ -82,5 +115,5 @@ class _NewExpenseState extends State<NewExpense> {
         ],
       ),
     );
-  }
+  } // End of _NewExpenseState class
 }
