@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -13,17 +14,24 @@ class _NewExpenseState extends State<NewExpense> {
   // A variablws to hold the entered info of the expense
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  // A variable to hold the selected date of the expense or null if no date is selected
+  DateTime? _selectedDate;
 
-  void _presentDatePicker() {
+  // A variable to hold the selected date of the expense
+  void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
     // Show a date picker dialog to select the date of the expense
-    showDatePicker(
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: firstDate,
       lastDate: now,
     );
+    setState(() {
+      // Update the selected date with the picked date from the date picker dialog
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -78,7 +86,11 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Selected Date'),
+                    Text(
+                      _selectedDate == null
+                        ? 'No date selected'
+                        : formatter.format(_selectedDate!), //  The ! tells that _selectedDate is not null and can be safely unwrapped
+                      ),
                     IconButton(
                       onPressed: _presentDatePicker,
                       icon: const Icon(Icons.calendar_month),
@@ -103,8 +115,8 @@ class _NewExpenseState extends State<NewExpense> {
                 ),
               ElevatedButton(
                 onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
+                  debugPrint(_titleController.text);
+                  debugPrint(_amountController.text);
                 },
                 child: const Text(
                   'Save Expense',
