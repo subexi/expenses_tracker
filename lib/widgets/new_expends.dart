@@ -36,6 +36,36 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
+  // A function to validate the entered data and submit the expense data
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // Show an error dialog if the entered data is invalid
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+            'Please make sure a valid title, amount, date and category was entered.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the error dialog when the OK button is pressed
+                Navigator.pop(ctx);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+  }
+
   @override
   // Dispose of the TextEditingController when the widget is removed from the widget tree
   void dispose() {
@@ -104,7 +134,7 @@ class _NewExpenseState extends State<NewExpense> {
           ),
 
           const SizedBox(height: 16),
-          
+
           // A Row to hold the Cancel and Save Expense buttons
           Row(
             children: [
@@ -140,8 +170,8 @@ class _NewExpenseState extends State<NewExpense> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  debugPrint(_titleController.text);
-                  debugPrint(_amountController.text);
+                  // Validate the entered data and submit the expense data when the Save Expense button is pressed
+                  _submitExpenseData();
                 },
                 child: const Text('Save Expense'),
               ),
