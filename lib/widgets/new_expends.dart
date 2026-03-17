@@ -11,11 +11,13 @@ class NewExpense extends StatefulWidget {
 }
 
 class _NewExpenseState extends State<NewExpense> {
-  // A variablws to hold the entered info of the expense
+  // Variables to hold the entered data of the expense
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   // A variable to hold the selected date of the expense or null if no date is selected
   DateTime? _selectedDate;
+  // A variable to hold the selected category of the expense
+  Category _selectedCategory = Category.leisure;
 
   // A variable to hold the selected date of the expense
   void _presentDatePicker() async {
@@ -56,9 +58,7 @@ class _NewExpenseState extends State<NewExpense> {
             maxLength: 50,
             // Set the keyboard type to text for the title input
             keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              label: Text('Title'),
-            ),
+            decoration: const InputDecoration(label: Text('Title')),
           ),
 
           // A TextField to input the amount of the expense
@@ -88,39 +88,62 @@ class _NewExpenseState extends State<NewExpense> {
                   children: [
                     Text(
                       _selectedDate == null
-                        ? 'No date selected'
-                        : formatter.format(_selectedDate!), //  The ! tells that _selectedDate is not null and can be safely unwrapped
-                      ),
+                          ? 'No date selected'
+                          : formatter.format(
+                              _selectedDate!,
+                            ), //  The ! tells that _selectedDate is not null and can be safely unwrapped
+                    ),
                     IconButton(
                       onPressed: _presentDatePicker,
                       icon: const Icon(Icons.calendar_month),
-                    )
+                    ),
                   ], // End of Row children
                 ),
               ),
             ], // End of Row children
           ),
 
+          const SizedBox(height: 16),
+          
           // A Row to hold the Cancel and Save Expense buttons
           Row(
             children: [
+              DropdownButton<Category>(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return;
+                  }
+                  // Update the selected category from the dropdown menu.
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
+              ),
+
+              const Spacer(),
+
               TextButton(
                 onPressed: () {
                   // Close the modal bottom sheet when the Cancel button is pressed
                   Navigator.pop(context);
                 },
-                  child: const Text(
-                    'Cancel',
-                  ),
-                ),
+                child: const Text('Cancel'),
+              ),
               ElevatedButton(
                 onPressed: () {
                   debugPrint(_titleController.text);
                   debugPrint(_amountController.text);
                 },
-                child: const Text(
-                  'Save Expense',
-                ),
+                child: const Text('Save Expense'),
               ),
             ],
           ),
