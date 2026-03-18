@@ -48,14 +48,43 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     // Remove an expense from the list of registered expenses based on its ID and update the UI
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    // Show a SnackBar to confirm the removal of the expense
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text('${expense.title} removed.'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            // Re-add the removed expense to the list of registered expenses and update the UI
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses found. Start adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     // Build the main UI for the Expenses screen
     return Scaffold(
       appBar: AppBar(
@@ -70,13 +99,8 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           const Text('The chart'),
-          // Display the list of registered expenses using the ExpensesList widget
-          Expanded(
-            child: ExpensesList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-            ),
-          ),
+          // Display either fallback text or the list of registered expenses.
+          Expanded(child: mainContent),
         ],
       ),
     );
