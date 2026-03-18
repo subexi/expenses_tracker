@@ -32,6 +32,9 @@ class _ExpensesState extends State<Expenses> {
   void _openAddExpenseOverlay() {
     // Open a modal bottom sheet to add a new expense
     showModalBottomSheet(
+      // Set isScrollControlled to true to allow the modal bottom sheet to take up the full
+      // height of the screen when the keyboard is open
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );

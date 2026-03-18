@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
@@ -42,9 +41,7 @@ class _NewExpenseState extends State<NewExpense> {
 
   // A function to validate the entered data and submit the expense data
   void _submitExpenseData() {
-    // Replace comma with dot for decimal separator compatibility
-    final amountText = _amountController.text.replaceAll(',', '.');
-    final enteredAmount = double.tryParse(amountText);
+    final enteredAmount = double.tryParse(_amountController.text);
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
@@ -95,7 +92,13 @@ class _NewExpenseState extends State<NewExpense> {
   Widget build(BuildContext context) {
     // Build the UI for the NewExpense screen
     return Padding(
-      padding: const EdgeInsets.all(16),
+      // Add padding around the content of the NewExpense screen
+      padding: EdgeInsets.fromLTRB(
+        16,
+        48,
+        16,
+        MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
       child: Column(
         children: [
           // A TextField to input the title of the expense, with a maximum length of 50 characters
@@ -119,10 +122,6 @@ class _NewExpenseState extends State<NewExpense> {
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  inputFormatters: [
-                    // Allow digits and comma/dot as decimal separator
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
-                  ],
                   decoration: const InputDecoration(
                     label: Text('Amount'),
                     // Add a prefix text to indicate that the amount is in dollars
