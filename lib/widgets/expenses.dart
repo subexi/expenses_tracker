@@ -47,6 +47,13 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    // Remove an expense from the list of registered expenses based on its ID and update the UI
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Build the main UI for the Expenses screen
@@ -67,6 +74,7 @@ class _ExpensesState extends State<Expenses> {
           Expanded(
             child: ExpensesList(
               expenses: _registeredExpenses,
+              onRemoveExpense: _removeExpense,
             ),
           ),
         ],
