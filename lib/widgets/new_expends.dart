@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  // A callback function to handle the addition of a new expense, which is passed from the parent widget
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() {
@@ -38,7 +42,9 @@ class _NewExpenseState extends State<NewExpense> {
 
   // A function to validate the entered data and submit the expense data
   void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
+    // Replace comma with dot for decimal separator compatibility
+    final amountText = _amountController.text.replaceAll(',', '.');
+    final enteredAmount = double.tryParse(amountText);
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
@@ -64,6 +70,17 @@ class _NewExpenseState extends State<NewExpense> {
       );
       return;
     }
+    // Create a new Expense object with the entered data and pass it to the onAddExpense callback function
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
+    );
+    // Close the modal bottom sheet after adding the expense
+    Navigator.pop(context);
   }
 
   @override
@@ -97,9 +114,15 @@ class _NewExpenseState extends State<NewExpense> {
               Expanded(
                 child: TextField(
                   // Use the TextEditingController to manage the input for the amount of the expense
-                  // Set the keyboard type to number for the amount input
+                  // Set the keyboard type to allow decimal numbers for the amount input
                   controller: _amountController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    // Allow digits and comma/dot as decimal separator
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
+                  ],
                   decoration: const InputDecoration(
                     label: Text('Amount'),
                     // Add a prefix text to indicate that the amount is in dollars

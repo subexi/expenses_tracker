@@ -33,8 +33,15 @@ class _ExpensesState extends State<Expenses> {
     // Open a modal bottom sheet to add a new expense
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const NewExpense(),
+      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );
+  }
+
+  void _addExpense(Expense expense) {
+    // Add a new expense to the list of registered expenses and update the UI
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
   }
 
   @override
@@ -54,7 +61,11 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text('The chart'),
           // Display the list of registered expenses using the ExpensesList widget
-          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+          Expanded(
+            child: ExpensesList(
+              expenses: _registeredExpenses,
+            ),
+          ),
         ],
       ),
     );
