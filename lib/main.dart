@@ -6,7 +6,10 @@ void main() {
   runApp(
     MaterialApp(
       // Set the theme of the app to use Material 3 design
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData().copyWith(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 220, 189, 252),
+      ),
+      debugShowCheckedModeBanner: false,
       home: Expenses(),
     ),
   );
