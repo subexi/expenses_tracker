@@ -13,14 +13,33 @@ void main() {
       // Set the color scheme of the app using the defined color scheme
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
-        appBarTheme: const AppBarTheme().copyWith(
+        appBarTheme: AppBarTheme().copyWith(
           backgroundColor: kColorScheme.onPrimaryContainer,
           foregroundColor: kColorScheme.primaryContainer,
         ),
+        cardTheme: CardThemeData(
+          color: kColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kColorScheme.primaryContainer,
+          ),
+        ),
+        textTheme: ThemeData().textTheme.copyWith(
+              titleLarge: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: kColorScheme.onSecondaryContainer,
+                fontSize: 14,
+              ),
+            ),
       ),
       // Disable the debug banner in the top right corner of the app
       debugShowCheckedModeBanner: false,
-      home: Expenses(),
+      home: const Expenses(),
     ),
   );
 }
