@@ -42,5 +42,26 @@ class Expense {
 
   // A getter to return the formatted date of the expense
   String get formattedDate => formatter.format(date);
+}
 
+class ExpenseBucket {
+  // Constructor for the ExpenseBucket class
+  ExpenseBucket({
+    required this.category,
+    required this.expenses,
+  });
+
+  // Define the properties of the ExpenseBucket class
+  final Category category;
+  final List<Expense> expenses;
+
+  // A getter to calculate the total amount of all expenses in the bucket
+  double get totalExpenses {
+    double sum = 0;
+    // Iterate through each expense in the bucket and add its amount to the sum
+    for (final expense in expenses) {
+      sum += expense.amount;
+    }
+    return sum;
+  }
 }
