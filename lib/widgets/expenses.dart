@@ -88,6 +88,7 @@ class _ExpensesState extends State<Expenses> {
     // Build the main UI for the Expenses screen
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         title: const Text('Flutter ExpenseTracker'),
         actions: [
           IconButton(

@@ -7,9 +7,32 @@ var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 96, 59, 181),
 );
 
+// Define a dark color scheme for the app using a different seed color
+var kDarkColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 5, 99, 125),
+  brightness: Brightness.dark,
+);
+
 void main() {
   runApp(
     MaterialApp(
+      // Set the dark theme of the app using the defined dark color scheme
+      darkTheme: ThemeData().copyWith(
+        colorScheme: kDarkColorScheme,
+        cardTheme: CardThemeData(
+          color: kDarkColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kDarkColorScheme.primaryContainer,
+            foregroundColor: kDarkColorScheme.onPrimaryContainer,
+          ),
+        ),
+      ),
       // Set the color scheme of the app using the defined color scheme
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
@@ -39,6 +62,7 @@ void main() {
       ),
       // Disable the debug banner in the top right corner of the app
       debugShowCheckedModeBanner: false,
+      // themeMode: ThemeMode.system, // Use the system theme mode (light or dark) based on the user's device settings
       home: const Expenses(),
     ),
   );
