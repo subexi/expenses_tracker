@@ -16,8 +16,13 @@ class ExpenseItem extends StatelessWidget {
           horizontal: 16,
         ),
         child: Column(
+          // Align the children of the Column to the start of the cross axis (left side)
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(expense.title),
+            Text(
+              expense.title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 4),
             // Display the amount and date of the expense in a Row widget
             Row(
