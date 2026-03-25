@@ -51,6 +51,13 @@ class ExpenseBucket {
     required this.expenses,
   });
 
+  // A named constructor to create an ExpenseBucket for a specific category by filtering the list of all expenses
+  ExpenseBucket.forCategory(List<Expense> allExpenses, this.category)
+      : expenses = allExpenses
+      // Filter the list of all expenses to include only those that belong to the specified category and assign it to the expenses property
+            .where((expense) => expense.category == category)
+            .toList(); // Filter the expenses based on the category
+
   // Define the properties of the ExpenseBucket class
   final Category category;
   final List<Expense> expenses;
