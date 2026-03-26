@@ -75,6 +75,12 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    // Print the width and height of the screen to the console for debugging purposes
+    /* debugPrint(MediaQuery.of(context).size.width.toString());
+    debugPrint(MediaQuery.of(context).size.height.toString()); */
+
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -98,10 +104,20 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
+      // Use a Column to display the Chart widget and the list of registered expenses
+      body: width < 600 ? Column(
         children: [
           // Display the Chart widget to show a visual representation of the expenses
           Chart(expenses: _registeredExpenses),
+          // Display either fallback text or the list of registered expenses.
+          Expanded(child: mainContent),
+        ],
+        )
+        // If the screen width is greater than or equal to 600 pixels, use a Row to display
+        // the Chart widget and the list of registered expenses side by side
+      : Row(children: [
+          Expanded(child: Chart(expenses: _registeredExpenses),
+          ),
           // Display either fallback text or the list of registered expenses.
           Expanded(child: mainContent),
         ],
