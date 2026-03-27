@@ -14,6 +14,8 @@ class ExpensesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardMargin = Theme.of(context).cardTheme.margin ?? EdgeInsets.zero;
+
     // Build a ListView to display the list of expenses
     return ListView.builder(
       // Set the number of items in the list to the length of the expenses list
@@ -25,7 +27,7 @@ class ExpensesList extends StatelessWidget {
           // Set the background color of the Dismissible widget to a semi-transparent error color
           color: Theme.of(context).colorScheme.error.withValues(alpha: 0.50),
           margin: EdgeInsets.symmetric(
-            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
+            horizontal: cardMargin.horizontal,
           ),
         ),
         // When an item is dismissed, call the onRemoveExpense function with the corresponding expense

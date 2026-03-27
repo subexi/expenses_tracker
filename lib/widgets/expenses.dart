@@ -31,13 +31,23 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay() {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     // Open a modal bottom sheet to add a new expense
     showModalBottomSheet(
       // Set isScrollControlled to true to allow the modal bottom sheet to take up the full
       // height of the screen when the keyboard is open
       isScrollControlled: true,
+      useSafeArea: true,
+      constraints: BoxConstraints(
+        minWidth: screenWidth,
+        maxWidth: screenWidth,
+      ),
       context: context,
-      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
+      builder: (ctx) => FractionallySizedBox(
+        widthFactor: 1,
+        child: NewExpense(onAddExpense: _addExpense),
+      ),
     );
   }
 

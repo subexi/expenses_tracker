@@ -90,116 +90,125 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the amount of space taken up by the keyboard to adjust the padding of the content accordingly
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
     // Build the UI for the NewExpense screen
-    return Padding(
-      // Add padding around the content of the NewExpense screen
-      padding: EdgeInsets.fromLTRB(
-        16,
-        48,
-        16,
-        MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
-      child: Column(
-        children: [
-          // A TextField to input the title of the expense, with a maximum length of 50 characters
-          TextField(
-            // Use the TextEditingController to manage the input for the title of the expense
-            controller: _titleController,
-            maxLength: 50,
-            // Set the keyboard type to text for the title input
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(label: Text('Title')),
+    // A SingleChildScrollView to allow the content to be scrollable when the keyboard is open
+    return SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          // Add padding around the content of the NewExpense screen
+          padding: EdgeInsets.fromLTRB(
+            16,
+            48,
+            16,
+            keyboardSpace + 16,
           ),
-
-          // A TextField to input the amount of the expense
-          Row(
+          child: Column(
             children: [
-              Expanded(
-                child: TextField(
-                  // Use the TextEditingController to manage the input for the amount of the expense
-                  // Set the keyboard type to allow decimal numbers for the amount input
-                  controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: const InputDecoration(
-                    label: Text('Amount'),
-                    // Add a prefix text to indicate that the amount is in dollars
-                    prefixText: '\$ ',
-                  ),
-                ), //
+              // A TextField to input the title of the expense, with a maximum length of 50 characters
+              TextField(
+                // Use the TextEditingController to manage the input for the title of the expense
+                controller: _titleController,
+                maxLength: 50,
+                // Set the keyboard type to text for the title input
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(label: Text('Title')),
               ),
-
-              const SizedBox(width: 16),
-
-              Expanded(
-                child: Row(
-                  // Align the children of the Row to the end of the main axis
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'No date selected'
-                          : formatter.format(
-                              _selectedDate!,
-                            ), //  The ! tells that _selectedDate is not null and can be safely unwrapped
-                    ),
-                    IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_month),
-                    ),
-                  ], // End of Row children
-                ),
-              ),
-            ], // End of Row children
-          ),
-
-          const SizedBox(height: 16),
-
-          // A Row to hold the Cancel and Save Expense buttons
-          Row(
-            children: [
-              DropdownButton<Category>(
-                value: _selectedCategory,
-                items: Category.values
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category.name.toUpperCase()),
+              // A TextField to input the amount of the expense
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      // Use the TextEditingController to manage the input for the amount of the expense
+                      // Set the keyboard type to allow decimal numbers for the amount input
+                      controller: _amountController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) {
-                    return;
-                  }
-                  // Update the selected category from the dropdown menu.
-                  setState(() {
-                    _selectedCategory = value;
-                  });
-                },
+                      decoration: const InputDecoration(
+                        label: Text('Amount'),
+                        // Add a prefix text to indicate that the amount is in dollars
+                        prefixText: '\$ ',
+                      ),
+                    ), //
+                  ),
+
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Row(
+                      // Align the children of the Row to the end of the main axis
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          _selectedDate == null
+                              ? 'No date selected'
+                              : formatter.format(
+                                  _selectedDate!,
+                                ), //  The ! tells that _selectedDate is not null and can be safely unwrapped
+                        ),
+                        IconButton(
+                          onPressed: _presentDatePicker,
+                          icon: const Icon(Icons.calendar_month),
+                        ),
+                      ], // End of Row children
+                    ),
+                  ),
+                ], // End of Row children
               ),
 
-              const Spacer(),
+              const SizedBox(height: 16),
 
-              TextButton(
-                onPressed: () {
-                  // Close the modal bottom sheet when the Cancel button is pressed
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Validate the entered data and submit the expense data when the Save Expense button is pressed
-                  _submitExpenseData();
-                },
-                child: const Text('Save Expense'),
+              // A Row to hold the Cancel and Save Expense buttons
+              Row(
+                children: [
+                  DropdownButton<Category>(
+                    value: _selectedCategory,
+                    items: Category.values
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name.toUpperCase()),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) {
+                        return;
+                      }
+                      // Update the selected category from the dropdown menu.
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
+                  ),
+
+                  const Spacer(),
+
+                  TextButton(
+                    onPressed: () {
+                      // Close the modal bottom sheet when the Cancel button is pressed
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Validate the entered data and submit the expense data when the Save Expense button is pressed
+                      _submitExpenseData();
+                    },
+                    child: const Text('Save Expense'),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   } // End of _NewExpenseState class
