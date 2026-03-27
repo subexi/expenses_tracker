@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 
@@ -39,14 +42,27 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
-  // A function to validate the entered data and submit the expense data
-  void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
-    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
-    if (_titleController.text.trim().isEmpty ||
-        amountIsInvalid ||
-        _selectedDate == null) {
-      // Show an error dialog if the entered data is invalid
+  void _showDialog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+            'Please make sure a valid title, amount, date and category was entered.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the error dialog when the OK button is pressed
+                Navigator.pop(ctx);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -65,6 +81,18 @@ class _NewExpenseState extends State<NewExpense> {
           ],
         ),
       );
+    }
+  }
+
+
+  // A function to validate the entered data and submit the expense data
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+        _showDialog();
       return;
     }
     // Create a new Expense object with the entered data and pass it to the onAddExpense callback function
@@ -266,9 +294,5 @@ class _NewExpenseState extends State<NewExpense> {
         ),
       );
     });
-
-    // Build the UI for the NewExpense screen
-    // A SingleChildScrollView to allow the content to be scrollable when the keyboard is open
-
   } // End of _NewExpenseState class
 }
